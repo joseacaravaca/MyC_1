@@ -24,5 +24,6 @@ reg = root.register(callback)
   
 e.config(validate ="key",  
          validatecommand =(reg, '% P')) 
+         
   
 root.mainloop() 
