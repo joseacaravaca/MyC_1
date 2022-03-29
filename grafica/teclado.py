@@ -1,12 +1,9 @@
-from ast import Return
+#from ast import Return
 from io import BytesIO
-from itertools import product
 import re
 import time
 import tkinter as tk
-from tkinter import NW, LabelFrame, ttk
-from tkinter import END, Label
-from xml.sax.handler import feature_validation
+from tkinter import ttk
 import requests as req
 from MiDat import socio
 from PIL import Image, ImageTk
