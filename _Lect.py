@@ -5,7 +5,7 @@ import _thread
 
 
 def readSerialOne(Thread):
-    ser = serial.Serial('/dev/ttyACM0', 19200, timeout=0)
+    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=0)
 
     while True:
         line = ser.readline().decode()
