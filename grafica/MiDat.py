@@ -71,8 +71,8 @@ def close_ssh_tunnel():
 def socio (chip,puerta):
     open_ssh_tunnel()
     mysql_connect()
-    df = run_query("SELECT torn_nomb,torn_apel, torn_pu" + puerta + " FROM g_torn01 where torn_chip=" + chip + ";")
+    df = run_query("SELECT torn_nomb,torn_apel,torn_foto, torn_pu" + puerta + " FROM g_torn01 where torn_chip=" + chip + ";")
     return df.head(1)
-    #print (df)
     mysql_disconnect()
     close_ssh_tunnel()
+    
