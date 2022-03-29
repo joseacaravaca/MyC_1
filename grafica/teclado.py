@@ -1,4 +1,4 @@
-#from ast import Return
+#Version 1.0
 from io import BytesIO
 import re
 import time
