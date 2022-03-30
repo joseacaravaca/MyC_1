@@ -1,0 +1,41 @@
+from tkinter import *
+from tkinter import ttk
+import tkinter as tk
+import tkinter
+from PIL import Image, ImageTk
+#from tkinter import filedialog
+from PIL import ImageTk, Image
+import tkinter
+import urllib.request
+
+Product = Tk()
+Product.title('App - Add Product')
+
+# #SHOW IMAGE IN FRAME
+def open_img():
+    global img
+    img = Image.open("http://www.ceeldense.es/cee_2/qazxsw84/foto/socee/0088779.jpg")
+    img = img.resize((100, 100), Image.ANTIALIAS)
+    img = ImageTk.PhotoImage(img)
+    label2.config(image=img)
+
+# FRAME PRODUCT
+frame = LabelFrame(Product, text='FOTO SOCIO')
+frame.pack(anchor=NW)
+label = Label(frame, text='Product:').pack(anchor=N)
+#name = ttk.Entry(frame).pack(anchor=N)
+label1 = Label(frame, text='Pic:').pack(anchor=N)
+
+# ###OPEN DEFAULT IMAGE
+stim_filename = "http://www.ceeldense.es/cee_2/qazxsw84/foto/socee/0088779.jpg"
+urllib.request.urlretrieve(stim_filename, "tmp.jpg")
+PIL_image = Image.open('tmp.jpg')
+width = 10
+height = 10
+img = ImageTk.PhotoImage(PIL_image)
+label2 = Label(frame, image=img)
+label2.image = img  # keep a reference!
+label2.pack()
+
+
+Product.mainloop()

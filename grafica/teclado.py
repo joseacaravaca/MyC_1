@@ -77,9 +77,4 @@ def resultado(event):
 
 chip.focus_set
 chip.bind("<Return>", resultado)
-ventana.mainloop()
-
-
-
-
-   
+ventana.mainloop() 
