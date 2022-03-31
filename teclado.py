@@ -3,10 +3,12 @@ from io import BytesIO
 import re
 import time
 import tkinter as tk
-from tkinter import ttk
+from tkinter import N, NW, Label, LabelFrame, ttk
 import requests as req
 from MiDat import socio
 from PIL import Image, ImageTk
+import urllib.request
+
 
 #Ajustes locales
 puerta="01"
@@ -42,7 +44,8 @@ def borrar():
    nombre.delete("0","end")
    datos.delete("0","end")
    msg.delete("0","end")
-
+   foto_socio("sin-imagen.jpg")
+   
 def estado(caso):
    if caso=="00":
      ret="no esta dado de alta"
@@ -56,6 +59,38 @@ def estado(caso):
       ret="desconocido"
    return ret
 
+
+# FRAME FOTO
+frame = LabelFrame(ventana, text='FOTO SOCIO')
+frame.pack(anchor=NW)
+
+
+
+# IMAGEN POR DEFECTO
+PIL_image = Image.open('sin-imagen.jpg')
+PIL_image = PIL_image.resize((100, 100), Image.ANTIALIAS)
+img = ImageTk.PhotoImage(PIL_image)
+label2 = Label(frame, image=img)
+label2.image = img  # keep a reference!
+label2.pack()
+
+#SHOW IMAGE IN FRAME
+def foto_socio(rfoto):
+    global img
+    if rfoto=="sin-imagen.jpg":
+      img = Image.open('sin-imagen.jpg')
+      img = img.resize((100, 100), Image.ANTIALIAS)
+      img = ImageTk.PhotoImage(img)
+      label2.config(image=img)
+    else:
+      urllib.request.urlretrieve(url_a + rfoto, "tmp.jpg")
+      img = Image.open('tmp.jpg')
+      img = img.resize((100, 100), Image.ANTIALIAS)
+      img = ImageTk.PhotoImage(img)
+      label2.config(image=img)
+
+
+
 #Funcion que se ejecuta al validar la entrada de chip
 def resultado(event):
    fecha.insert(0,time.strftime("%I:%M:%S"))
@@ -68,11 +103,14 @@ def resultado(event):
 
       if rsocio.empty:
             nombre.insert(0,"no encontrado")
+            foto_socio("sin-imagen.jpg")
+
            
       else:
          nombre.insert(0,rsocio.at[0,"torn_nomb"] + " " +rsocio.at[0,"torn_apel"])
          #Estado del socio con respecto a la puerta
          msg.insert(0,estado(str(rsocio.at[0,"torn_pu"+puerta])))
+         foto_socio(rsocio.at[0,"torn_foto"])
    ventana.after(3000,borrar)
 
 chip.focus_set
