@@ -1,4 +1,4 @@
-#Version 1.0
+#Version 1.1
 from ast import If
 import re
 import time
@@ -12,7 +12,7 @@ from PIL import Image, ImageTk
 puerta="01"
 url_a="http://www.ceeldense.es/cee_2/qazxsw84/foto/socee/"
 hfoto=150 #alto de la foto
-wmaxfoto=hfoto/1.4 #Ancho a partir del que la foto se recorta
+wmax=hfoto/1.4 #Ancho a partir del que la foto se recorta
 
 #Creación del formulario
 ventana=tk.Tk()
@@ -21,16 +21,13 @@ ventana.geometry("600x400")
 ventana.resizable(False,False)
 ventana.attributes('-zoomed',False)
 
-# FRAME FOTO
-frame = LabelFrame(ventana, text='FOTO SOCIO')
-frame.pack(anchor=NW)
 
 #Cuadros de texto
 res=tk.StringVar()
-fecha = ttk.Entry()
-nombre=ttk.Entry()
-datos=ttk.Entry()
-msg=ttk.Entry()
+fecha = ttk.Label()
+nombre=ttk.Label()
+datos=ttk.Label()
+msg=ttk.Label()
 
 #Cuadro de texto capturar entrada de lector o manual
 chip=ttk.Entry(textvariable=res)
@@ -46,10 +43,10 @@ msg.pack()
 chip.focus_set()   
 
 def borrar():
-   fecha.delete("0","end")
-   nombre.delete("0","end")
-   datos.delete("0","end")
-   msg.delete("0","end")
+   fecha.configure(text="")
+   nombre.configure(text="")
+   datos.configure(text="")
+   msg.configure(text="")
    chip.delete("0","end")
    foto_socio("sin-imagen.jpg")
    
@@ -66,25 +63,26 @@ def estado(caso):
       ret="desconocido"
    return ret
 
+def ajustar_imagen(ancho,alto,imagen):
+   hpercen = (alto/ float(imagen.size[1]))
+   w = int((float(imagen.size[0]) * float(hpercen)))
+   PIL_image = PIL_image.resize((w, hfoto),Image.NEAREST)
+   if imagen.width > ancho:
+      l=(imagen.width-ancho)/2
+      t=0
+      r=l+ancho
+      b=alto
+      imagen=imagen.crop(l,t,r,b)
+      return imagen
 
 # IMAGEN POR DEFECTO
-PIL_image = Image.open('sin-imagen.jpg')
-hpercen = (hfoto / float(PIL_image.size[1]))
-w = int((float(PIL_image.size[0]) * float(hpercen)))
-PIL_image = PIL_image.resize((w, hfoto),Image.NEAREST)
-if PIL_image.width > wmaxfoto:
-   l=(PIL_image.width-wmaxfoto)/2
-   t=0
-   r=l+wmaxfoto
-   b=hfoto
-   PIL_image=PIL_image.crop(l,t,r,b)
-
+PIL_image = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
 img = ImageTk.PhotoImage(PIL_image)
-label2 = Label(frame, image=img)
+label2 = Label(ventana, image=img)
 label2.image = img  # keep a reference!
 label2.pack()
 
-#SHOW IMAGE IN FRAME
+#FOTO DE SOCIO
 def foto_socio(rfoto):
     global img
     if rfoto=="sin-imagen.jpg":
