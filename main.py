@@ -33,11 +33,14 @@ msg=ttk.Label()
 chip=ttk.Entry(textvariable=res)
 
 # Posicionar cuadros de texto
-fecha.pack()
-chip.pack()
-nombre.pack()
-datos.pack()
-msg.pack()
+ventana.columnconfigure(0, weight=1)
+ventana.columnconfigure(1, weight=3)
+
+fecha.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
+chip.grid(column=1, row=1, sticky=tk.W, padx=5, pady=5)
+nombre.grid(column=1, row=2, sticky=tk.W, padx=5, pady=5)
+datos.grid(column=1, row=3, sticky=tk.W, padx=5, pady=5)
+msg.grid(column=1, row=4, sticky=tk.W, padx=5, pady=5)
 
 #Foco a entrada de chip
 chip.focus_set()   
@@ -80,7 +83,7 @@ PIL_image = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
 img = ImageTk.PhotoImage(PIL_image)
 label2 = Label(ventana, image=img)
 label2.image = img  # keep a reference!
-label2.pack()
+label2.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
 
 #FOTO DE SOCIO
 def foto_socio(rfoto):
