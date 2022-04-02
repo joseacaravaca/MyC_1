@@ -1,6 +1,4 @@
 #Version 1.1
-from ast import If
-from cProfile import label
 import re
 import time
 import tkinter as tk
@@ -43,6 +41,7 @@ chip.grid(column=1, row=1, sticky=tk.W, padx=5, pady=5)
 nombre.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
 datos.grid(column=1, row=3, sticky=tk.W, padx=5, pady=5)
 msg.grid(column=1, row=4, sticky=tk.W, padx=5, pady=5)
+iminf.grid(column=1, row=5, sticky=tk.W, padx=5, pady=5)
 
 #Foco a entrada de chip
 chip.focus_set()   
@@ -56,11 +55,11 @@ def borrar():
    foto_socio("sin-imagen.jpg")
 
 def iconoinformativo():
-   img=ImageTk.PhotoImage(Image.open('ok.gif'))
-   iminf=Label(ventana)
-   iminf.image=img
-   iminf.grid(column=0, row=5, sticky=tk.W, padx=5, pady=5)
-   
+   global imx
+   im=ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
+   imx = ImageTk.PhotoImage(im)
+   iminf=Label(ventana, image=imx)
+     
 def estado(caso):
    if caso=="00":
      ret="no esta dado de alta"
@@ -91,7 +90,6 @@ def ajustar_imagen(ancho,alto,imagen):
 PIL_image = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
 img = ImageTk.PhotoImage(PIL_image)
 fotosocio = Label(ventana, image=img)
-fotosocio.image = img  # keep a reference!
 fotosocio.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
 
 #FOTO DE SOCIO
