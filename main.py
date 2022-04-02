@@ -1,10 +1,11 @@
 #Version 1.1
 from ast import If
+from cProfile import label
 import re
 import time
 import tkinter as tk
 import urllib.request
-from tkinter import NW, Label, LabelFrame, ttk
+from tkinter import Label, ttk
 from MiDat import socio
 from PIL import Image, ImageTk
 
@@ -28,6 +29,7 @@ fecha = ttk.Label()
 nombre=ttk.Label(font=('Arial',20))
 datos=ttk.Label()
 msg=ttk.Label()
+iminf=ttk.Label()
 
 #Cuadro de texto capturar entrada de lector o manual
 chip=ttk.Entry(textvariable=res)
@@ -52,12 +54,19 @@ def borrar():
    msg.configure(text="")
    chip.delete("0","end")
    foto_socio("sin-imagen.jpg")
+
+def iconoinformativo():
+   img=ImageTk.PhotoImage(Image.open('ok.gif'))
+   iminf=Label(ventana)
+   iminf.image=img
+   iminf(column=0, row=5, sticky=tk.W, padx=5, pady=5)
    
 def estado(caso):
    if caso=="00":
      ret="no esta dado de alta"
    elif caso=="11":
       ret="correcto"
+      iconoinformativo()
    elif caso=="10":
       ret="cuota impagada"
    elif caso=="12":
@@ -81,9 +90,9 @@ def ajustar_imagen(ancho,alto,imagen):
 # IMAGEN POR DEFECTO
 PIL_image = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
 img = ImageTk.PhotoImage(PIL_image)
-label2 = Label(ventana, image=img)
-label2.image = img  # keep a reference!
-label2.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
+fotosocio = Label(ventana, image=img)
+fotosocio.image = img  # keep a reference!
+fotosocio.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
 
 #FOTO DE SOCIO
 def foto_socio(rfoto):
@@ -91,17 +100,17 @@ def foto_socio(rfoto):
     if rfoto=="sin-imagen.jpg":
       img =  ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
       img = ImageTk.PhotoImage(img)
-      label2.config(image=img)
+      fotosocio.config(image=img)
     else:
         try:
             urllib.request.urlretrieve(url_a + rfoto, "tmp.jpg")
             img = ajustar_imagen(wmax,hfoto,Image.open('tmp.jpg'))
             img = ImageTk.PhotoImage(img)
-            label2.config(image=img)
+            fotosocio.config(image=img)
         except:
             img = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
             img = ImageTk.PhotoImage(img)
-            label2.config(image=img)
+            fotosocio.config(image=img)
 
 
 #Funcion que se ejecuta al validar la entrada de chip
