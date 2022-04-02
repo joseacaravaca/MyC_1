@@ -25,7 +25,7 @@ ventana.resizable(False,False)
 #Cuadros de texto
 res=tk.StringVar()
 fecha = ttk.Label()
-nombre=ttk.Label()
+nombre=ttk.Label(font=('Arial',20))
 datos=ttk.Label()
 msg=ttk.Label()
 
@@ -34,11 +34,11 @@ chip=ttk.Entry(textvariable=res)
 
 # Posicionar cuadros de texto
 ventana.columnconfigure(0, weight=1)
-ventana.columnconfigure(1, weight=3)
+ventana.columnconfigure(1, weight=4)
 
 fecha.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
 chip.grid(column=1, row=1, sticky=tk.W, padx=5, pady=5)
-nombre.grid(column=1, row=2, sticky=tk.W, padx=5, pady=5)
+nombre.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
 datos.grid(column=1, row=3, sticky=tk.W, padx=5, pady=5)
 msg.grid(column=1, row=4, sticky=tk.W, padx=5, pady=5)
 
@@ -99,7 +99,9 @@ def foto_socio(rfoto):
             img = ImageTk.PhotoImage(img)
             label2.config(image=img)
         except:
-            foto_socio("sin-imagen.jpg")
+            img = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
+            img = ImageTk.PhotoImage(img)
+            label2.config(image=img)
 
 
 #Funcion que se ejecuta al validar la entrada de chip
