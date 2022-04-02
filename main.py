@@ -86,19 +86,13 @@ label2.pack()
 def foto_socio(rfoto):
     global img
     if rfoto=="sin-imagen.jpg":
-      img = Image.open('sin-imagen.jpg')
-      hpercen = (hfoto / float(img.size[1]))
-      w = int((float(img.size[0]) * float(hpercen)))
-      img = img.resize((w, hfoto),Image.NEAREST)
+      img =  ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
       img = ImageTk.PhotoImage(img)
       label2.config(image=img)
     else:
         try:
             urllib.request.urlretrieve(url_a + rfoto, "tmp.jpg")
-            img = Image.open('tmp.jpg')
-            hpercen = (hfoto / float(img.size[1]))
-            w = int((float(img.size[0]) * float(hpercen)))
-            img = img.resize((w, hfoto),Image.NEAREST)
+            img = ajustar_imagen(wmax,hfoto,Image.open('tmp.jpg'))
             img = ImageTk.PhotoImage(img)
             label2.config(image=img)
         except:
@@ -107,7 +101,7 @@ def foto_socio(rfoto):
 
 #Funcion que se ejecuta al validar la entrada de chip
 def resultado(event):
-   fecha.insert(0,time.strftime("%I:%M:%S"))
+   fecha.configure(text=time.strftime("%I:%M:%S"))
    numchip=res.get()
 
    if numchip.isnumeric():   
@@ -120,9 +114,9 @@ def resultado(event):
             foto_socio("sin-imagen.jpg")
            
       else:
-         nombre.insert(0,rsocio.at[0,"torn_nomb"] + " " +rsocio.at[0,"torn_apel"])
+         nombre.configure(text=rsocio.at[0,"torn_nomb"] + " " +rsocio.at[0,"torn_apel"])
          #Estado del socio con respecto a la puerta
-         msg.insert(0,estado(str(rsocio.at[0,"torn_pu"+puerta])))
+         msg.configure(text=estado(str(rsocio.at[0,"torn_pu"+puerta])))
          foto_socio(rsocio.at[0,"torn_foto"])
    ventana.after(3000,borrar)
 
