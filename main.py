@@ -19,7 +19,7 @@ ventana=tk.Tk()
 ventana.title("CONTROL DE ACCESOS")
 ventana.geometry("600x400")
 ventana.resizable(False,False)
-ventana.attributes('-zoomed',False)
+#ventana.attributes('-zoomed',False)
 
 
 #Cuadros de texto
@@ -66,13 +66,13 @@ def estado(caso):
 def ajustar_imagen(ancho,alto,imagen):
    hpercen = (alto/ float(imagen.size[1]))
    w = int((float(imagen.size[0]) * float(hpercen)))
-   PIL_image = PIL_image.resize((w, hfoto),Image.NEAREST)
+   imagen = imagen.resize((w, hfoto),Image.NEAREST)
    if imagen.width > ancho:
       l=(imagen.width-ancho)/2
       t=0
       r=l+ancho
       b=alto
-      imagen=imagen.crop(l,t,r,b)
+      imagen=imagen.crop((l,t,r,b))
       return imagen
 
 # IMAGEN POR DEFECTO
@@ -110,7 +110,7 @@ def resultado(event):
       rsocio=socio(nchip,puerta)
 
       if rsocio.empty:
-            nombre.insert(0,"no encontrado")
+            nombre.configure(text="no encontrado")
             foto_socio("sin-imagen.jpg")
            
       else:
