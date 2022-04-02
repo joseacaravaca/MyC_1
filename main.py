@@ -59,7 +59,7 @@ def iconoinformativo():
    img=ImageTk.PhotoImage(Image.open('ok.gif'))
    iminf=Label(ventana)
    iminf.image=img
-   iminf(column=0, row=5, sticky=tk.W, padx=5, pady=5)
+   iminf.grid(column=0, row=5, sticky=tk.W, padx=5, pady=5)
    
 def estado(caso):
    if caso=="00":
