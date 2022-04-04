@@ -1,5 +1,6 @@
 #Version 1.1
 import re
+from string import ascii_letters
 import time
 import tkinter as tk
 import urllib.request
@@ -10,8 +11,9 @@ from PIL import Image, ImageTk
 #Ajustes locales
 puerta="01"
 url_a="http://www.ceeldense.es/cee_2/qazxsw84/foto/socee/"
-hfoto=150 #alto de la foto
+hfoto=180 #alto de la foto
 wmax=hfoto/1.4 #Ancho a partir del que la foto se recorta
+lico=150 #Medidas de icono informativo
 
 #Creación del formulario
 ventana=tk.Tk()
@@ -20,28 +22,25 @@ ventana.geometry("600x400")
 ventana.resizable(False,False)
 #ventana.attributes('-zoomed',False)
 
-
 #Cuadros de texto
 res=tk.StringVar()
 fecha = ttk.Label()
-nombre=ttk.Label(font=('Arial',20))
+nombre=ttk.Label(font=('Arial',36))
+apellido=ttk.Label(font=('Arial',36))
 datos=ttk.Label()
-msg=ttk.Label()
+msg=ttk.Label(font=('Arial',36))
 iminf=ttk.Label()
 
 #Cuadro de texto capturar entrada de lector o manual
 chip=ttk.Entry(textvariable=res)
 
 # Posicionar cuadros de texto
-ventana.columnconfigure(0, weight=1)
-ventana.columnconfigure(1, weight=4)
-
-fecha.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
-chip.grid(column=1, row=1, sticky=tk.W, padx=5, pady=5)
-nombre.grid(column=1, row=0, sticky=tk.W, padx=5, pady=5)
-datos.grid(column=1, row=3, sticky=tk.W, padx=5, pady=5)
-msg.grid(column=1, row=4, sticky=tk.W, padx=5, pady=5)
-iminf.grid(column=1, row=5, sticky=tk.W, padx=5, pady=5)
+nombre.place(x=150,y=30)
+apellido.place(x=150,y=80)
+fecha.place(x=0,y=300)
+chip.place(x=10,y=360)
+datos.place(x=30,y=300)
+msg.place(x=10,y=300)
 
 #Foco a entrada de chip
 chip.focus_set()   
@@ -49,23 +48,34 @@ chip.focus_set()
 def borrar():
    fecha.configure(text="")
    nombre.configure(text="")
+   apellido.configure(text="")
    datos.configure(text="")
    msg.configure(text="")
    chip.delete("0","end")
    foto_socio("sin-imagen.jpg")
+   icoinfo('borra')
 
-def iconoinformativo():
+def icoinfo(ep):
+   #Icono informativo cambia segun el estado del socio
    global imx
-   im=ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
-   imx = ImageTk.PhotoImage(im)
-   iminf=Label(ventana, image=imx)
+   if ep=="11":
+         im=ajustar_imagen(lico,lico,Image.open('verde.jpg'))
+         imx = ImageTk.PhotoImage(im)
+         iminf.config(image=imx)
+   elif ep=="borra":
+         im=ajustar_imagen(lico,lico,Image.open('nada.jpg'))
+         imx = ImageTk.PhotoImage(im)
+         iminf.config(image=imx)
+   else:
+         im=ajustar_imagen(lico,lico,Image.open('rojo.jpg'))
+         imx = ImageTk.PhotoImage(im)
+         iminf.config(image=imx)
      
 def estado(caso):
    if caso=="00":
      ret="no esta dado de alta"
    elif caso=="11":
-      ret="correcto"
-      iconoinformativo()
+      ret="correcto "
    elif caso=="10":
       ret="cuota impagada"
    elif caso=="12":
@@ -84,13 +94,18 @@ def ajustar_imagen(ancho,alto,imagen):
       r=l+ancho
       b=alto
       imagen=imagen.crop((l,t,r,b))
-      return imagen
+   return imagen
 
 # IMAGEN POR DEFECTO
 PIL_image = ajustar_imagen(wmax,hfoto,Image.open('sin-imagen.jpg'))
 img = ImageTk.PhotoImage(PIL_image)
 fotosocio = Label(ventana, image=img)
-fotosocio.grid(column=0, row=0, sticky=tk.W, padx=5, pady=5)
+fotosocio.place(x=10,y=10)
+
+im=ajustar_imagen(lico,lico,Image.open('nada.jpg'))
+imx = ImageTk.PhotoImage(im)
+iminf=Label(ventana, image=imx)
+iminf.place(x=250,y=210)
 
 #FOTO DE SOCIO
 def foto_socio(rfoto):
@@ -124,12 +139,15 @@ def resultado(event):
       if rsocio.empty:
             nombre.configure(text="no encontrado")
             foto_socio("sin-imagen.jpg")
-           
+            icoinfo("rojo")        
       else:
-         nombre.configure(text=rsocio.at[0,"torn_nomb"] + " " +rsocio.at[0,"torn_apel"])
+         rpuerta=str(rsocio.at[0,"torn_pu"+puerta])
+         nombre.configure(text=rsocio.at[0,"torn_nomb"])
+         apellido.configure(text=rsocio.at[0,"torn_apel"])
          #Estado del socio con respecto a la puerta
-         msg.configure(text=estado(str(rsocio.at[0,"torn_pu"+puerta])))
+         msg.configure(text=estado(rpuerta))
          foto_socio(rsocio.at[0,"torn_foto"])
+         icoinfo(rpuerta)
    ventana.after(3000,borrar)
 
 chip.focus_set
