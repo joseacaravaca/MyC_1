@@ -1,6 +1,7 @@
 #Version 1.1
 import re
 from string import ascii_letters
+import sys
 import time
 import tkinter as tk
 import urllib.request
@@ -18,9 +19,9 @@ lico=150 #Medidas de icono informativo
 #Creación del formulario
 ventana=tk.Tk()
 ventana.title("CONTROL DE ACCESOS")
-ventana.geometry("600x400")
-ventana.resizable(False,False)
-#ventana.attributes('-zoomed',False)
+ventana.geometry("800x400")
+ventana.resizable(True,True)
+ventana.attributes('-fullscreen',True)
 
 #Cuadros de texto
 res=tk.StringVar()
@@ -87,7 +88,7 @@ def estado(caso):
 def ajustar_imagen(ancho,alto,imagen):
    hpercen = (alto/ float(imagen.size[1]))
    w = int((float(imagen.size[0]) * float(hpercen)))
-   imagen = imagen.resize((w, hfoto),Image.NEAREST)
+   imagen = imagen.resize((w, alto),Image.NEAREST)
    if imagen.width > ancho:
       l=(imagen.width-ancho)/2
       t=0
@@ -148,6 +149,13 @@ def resultado(event):
          msg.configure(text=estado(rpuerta))
          foto_socio(rsocio.at[0,"torn_foto"])
          icoinfo(rpuerta)
+   else:
+      if numchip=="v":
+         ventana.attributes('-fullscreen',False)
+      elif numchip=="q":
+         sys.exit()
+
+   
    ventana.after(3000,borrar)
 
 chip.focus_set
