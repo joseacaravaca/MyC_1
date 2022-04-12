@@ -143,7 +143,7 @@ def resultado(event):
       rsocio=socio(nchip,puerta)
 
       if rsocio.empty:
-            acceso_empleado(nchip)
+         acceso_empleado(nchip)
       else:
          rpuerta=str(rsocio.at[0,"torn_pu"+puerta])
          nombre.configure(text=rsocio.at[0,"torn_nomb"])
