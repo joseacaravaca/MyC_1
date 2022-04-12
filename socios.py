@@ -11,8 +11,8 @@ from sshtunnel import SSHTunnelForwarder
 ssh_host = 'www.ceeldense.es'
 ssh_username = 'ftp_josean'
 ssh_password = 'Josean#15.21'
-database_username = 'jacaravaca'
-database_password = 'Josean#15.21'
+dbr_usuario = 'jacaravaca'
+dbr_pass = 'Josean#15.21'
 database_name = 'bdd_cont'
 localhost = '127.0.0.1'
 
@@ -39,8 +39,8 @@ def mysql_connect():
 
     connection = pymysql.connect(
         host='127.0.0.1',
-        user=database_username,
-        passwd=database_password,
+        user=dbr_usuario,
+        passwd=dbr_pass,
         db=database_name,
         port=tunnel.local_bind_port
     )
@@ -72,7 +72,7 @@ def socio (chip,puerta):
     open_ssh_tunnel()
     mysql_connect()
     df = run_query("SELECT torn_nomb,torn_apel,torn_foto, torn_pu" + puerta + " FROM g_torn01 where torn_chip=" + chip + ";")
-    return df.head(1)
     mysql_disconnect()
     close_ssh_tunnel()
+    return df.head(1)
     

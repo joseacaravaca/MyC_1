@@ -1,15 +1,16 @@
-#Version 1.21
+#Version 1.3
 import re
 import sys
 import time
 import tkinter as tk
 import urllib.request
 from tkinter import Label, ttk
-from MiDat import socio
+from socios import socio
 from PIL import Image, ImageTk
+from empleados import empleado
 
 #Ajustes locales
-puerta="01"
+puerta="01" #Ajustar a la puerta que corresonda: 01=Porteria, 02=Gimnasio...
 url_a="http://www.ceeldense.es/cee_2/qazxsw84/foto/socee/"
 hfoto=200 #alto de la foto
 wmax=hfoto/1.4 #Ancho a partir del que la foto se recorta
@@ -21,7 +22,6 @@ ventana.title("CONTROL DE ACCESOS")
 ventana.geometry("800x400")
 ventana.resizable(True,True)
 ventana.attributes('-fullscreen',True)
-ventana.wm_attributes("-transparentcolor", 'red')
 
 #Cuadros de texto
 res=tk.StringVar()
@@ -143,10 +143,7 @@ def resultado(event):
       rsocio=socio(nchip,puerta)
 
       if rsocio.empty:
-            msg.configure(text="Acceso no permitido")
-            datos.configure(text="Tarjeta no válida")
-            foto_socio("sin-imagen.jpg")
-            icoinfo("rojo")        
+            acceso_empleado(nchip)
       else:
          rpuerta=str(rsocio.at[0,"torn_pu"+puerta])
          nombre.configure(text=rsocio.at[0,"torn_nomb"])
@@ -164,6 +161,19 @@ def resultado(event):
 
    
    ventana.after(3000,borrar)
+
+def acceso_empleado(chip):
+   remp=empleado(chip,puerta)
+
+   if remp.empty:
+      msg.configure(text="Acceso no permitido")
+      datos.configure(text="Tarjeta no válida")
+      foto_socio("sin-imagen.jpg")
+      icoinfo("rojo")
+   else:
+      nombre.configure(text=remp.at[0,"emp_nombre"])
+      apellido.configure(text=remp.at[0,"emp_apellidos"])
+
 
 chip.focus_set
 chip.bind("<Return>", resultado)
