@@ -137,12 +137,12 @@ def resultado(event):
    fecha.configure(text=time.strftime("%I:%M:%S"))
    numchip=res.get()
 
-   if numchip.isnumeric():   
+   if numchip.isnumeric(): #Si la entrada es numero datos de socio o empleado  
       p=re.compile("\d")
       nchip="".join(p.findall(numchip))[-6:]
       rsocio=socio(nchip,puerta)
 
-      if rsocio.empty:
+      if rsocio.empty: #Si no encuentra al socio prueba si es empleado
          acceso_empleado(nchip)
       else:
          rpuerta=str(rsocio.at[0,"torn_pu"+puerta])
@@ -153,7 +153,8 @@ def resultado(event):
          datos.configure(text=estado(rpuerta)[1])
          foto_socio(rsocio.at[0,"torn_foto"])
          icoinfo(rpuerta)
-   else:
+   else: 
+      #Control de la ventana por codigo de entrada.
       if numchip=="v":
          ventana.attributes('-fullscreen',False)
       elif numchip=="q":
