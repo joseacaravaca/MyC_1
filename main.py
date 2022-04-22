@@ -85,7 +85,7 @@ def estado(caso):
       ms="Cuota incorrecta, consulte"
    elif caso=="12":
       ret="Acceso no permitido"
-      ms="Acceso bloquedo, consulte"
+      ms="Acceso bloqueado, consulte"
    else:
       ret="desconocido"
    return [ret,ms]
